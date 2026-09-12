@@ -4,6 +4,10 @@ All notable UI/product changes are logged here.
 
 ## [Unreleased]
 
+### 2026-09-12 — Hide ended Tables from discovery
+
+- Home, Discover, Search, Nearby, and the map only list meetups that have not started yet. Discover's default "anytime" filter no longer includes past dates. The API browse cache always drops ended rows (and includes upcoming FULL tables).
+
 ### 2026-09-12 — Live newsletter subscribe route
 
 - Public subscribe is explicitly mounted at `POST /api/newsletter/subscribe` (`@Controller('newsletter')`) so the footer form hits a registered Nest route after API redeploy. Admin list stays at `GET /api/admin/newsletter/subscribers`.

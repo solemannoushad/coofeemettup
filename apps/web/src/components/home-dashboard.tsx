@@ -18,6 +18,7 @@ import { categoryIcon, splitCategories } from '@/lib/category-icon';
 import { CategoryPills } from '@/components/category-pills';
 import { FeaturedShowcase } from '@/components/featured-showcase';
 import { tableCta } from '@/lib/table-cta';
+import { upcomingDiscoverTables } from '@/lib/table-time';
 import { FadeIn } from '@/components/fade-in';
 import { StaggerIn } from '@/components/stagger-in';
 
@@ -86,9 +87,10 @@ export function HomeDashboard({ user }: { user: PublicUser }) {
   }, [user.id]);
 
   const viewerId = user.id;
-  const upcoming = tables.slice(0, 6);
+  const discoverable = upcomingDiscoverTables(tables);
+  const upcoming = discoverable.slice(0, 6);
   const verified = user.verificationStatus === 'VERIFIED';
-  const vibes = [...new Set(tables.flatMap((t) => splitCategories(t.category)))].slice(0, 6);
+  const vibes = [...new Set(discoverable.flatMap((t) => splitCategories(t.category)))].slice(0, 6);
   const name = user.firstName ?? 'there';
 
   // eslint-disable-next-line react-hooks/purity -- one-time clock read for greeting + relative timestamps
@@ -169,7 +171,7 @@ export function HomeDashboard({ user }: { user: PublicUser }) {
             </div>
             {/* stats row */}
             <div className="mt-5 flex flex-col gap-3 border-t border-white/10 pt-4 sm:mt-7 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-10 sm:gap-y-3 sm:pt-5">
-              <HeroStat icon="fa-location-dot" value={String(tables.length)} label="Meetups nearby" />
+              <HeroStat icon="fa-location-dot" value={String(discoverable.length)} label="Meetups nearby" />
               <HeroStat
                 icon="fa-calendar-day"
                 value={next ? next.title ?? next.category : 'None yet'}

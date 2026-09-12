@@ -63,6 +63,8 @@ function applyFilters(
     // Completed tables belong only to the "past" view.
     if (when !== 'past' && t.status === 'COMPLETED') return false;
 
+    // Public "all" still hides ended tables; only the Past preset shows them.
+    if (when !== 'past' && start < now) return false;
     // when filter
     if (when === 'upcoming' && start < now) return false;
     if (when === 'past' && start >= now) return false;

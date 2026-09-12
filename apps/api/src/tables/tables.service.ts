@@ -448,7 +448,7 @@ export class TablesService {
     const now = new Date();
     if (!tables) {
       tables = await this.prisma.table.findMany({
-        where: { status: 'OPEN', startAt: { gt: now } },
+        where: { status: { in: ['OPEN', 'FULL'] }, startAt: { gt: now } },
         include: { cafe: true, host: { select: HOST_SELECT } },
         orderBy: { startAt: 'asc' },
       });
@@ -457,10 +457,10 @@ export class TablesService {
         tables,
         CacheService.TTL_BROWSE_SEC,
       );
-    } else {
-      // Cache TTL can outlive a table's start time — drop anything no longer upcoming.
-      tables = tables.filter((t) => isUpcomingTable(t.startAt, now.getTime()));
     }
+    // Always drop ended rows — Redis TTL can outlive startAt, and older
+    // payloads may not have been queried with a start filter.
+    tables = tables.filter((t) => isUpcomingTable(t.startAt, now.getTime()));
     // Per-viewer fields stay live (cheap) so we can share one browse cache.
     const saved = await this.savedSet(userId);
     const ids = tables.map((t) => t.id);

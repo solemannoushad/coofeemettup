@@ -9,6 +9,7 @@ import { ApiError, type TableDto } from '@jrst/api-client';
 import { useAuth } from '@/components/auth-provider';
 import { api } from '@/lib/api';
 import { peekCache, putCache, swrGet, tablesCacheKeys } from '@/lib/data-cache';
+import { upcomingDiscoverTables } from '@/lib/table-time';
 import { formatDateTime, formatPKR } from '@/lib/format';
 import { Spinner } from '@/components/spinner';
 import { categoryIcon } from '@/lib/category-icon';
@@ -147,7 +148,9 @@ export default function TablesMap({
     [],
   );
 
-  const sourceTables = useExternal ? (externalTables ?? []) : tables;
+  const sourceTables = upcomingDiscoverTables(
+    useExternal ? (externalTables ?? []) : tables,
+  );
   const showLoading = useExternal ? (externalLoading ?? false) : loading;
 
   const pins = useMemo(() => {

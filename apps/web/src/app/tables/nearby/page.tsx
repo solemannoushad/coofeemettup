@@ -13,6 +13,7 @@ import { categoryIcon, splitCategories } from '@/lib/category-icon';
 import { CategoryPills } from '@/components/category-pills';
 import { haversineKm, formatDistance } from '@/lib/geo';
 import { tableCta } from '@/lib/table-cta';
+import { upcomingDiscoverTables } from '@/lib/table-time';
 import { useDeviceLocation } from '@/lib/use-device-location';
 
 // Map libraries touch window/document — load client-only.
@@ -233,7 +234,8 @@ export default function NearbyTablesPage() {
   const [status, setStatus] = useState<'all' | 'available' | 'few' | 'full'>('all');
   const [visible, setVisible] = useState(PAGE_SIZE);
 
-  const tablesView = tables ?? seedBrowse ?? null;
+  const rawBrowse = tables ?? seedBrowse ?? null;
+  const tablesView = rawBrowse == null ? null : upcomingDiscoverTables(rawBrowse);
   const listsPending = loadingTables && tablesView == null;
 
   /* data fetch */

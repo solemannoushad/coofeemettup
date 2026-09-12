@@ -19,6 +19,7 @@ import { EmptyMascot } from '@/components/empty-mascot';
 import { StaggerIn } from '@/components/stagger-in';
 import { haversineKm, formatDistance, googleMapsUrl } from '@/lib/geo';
 import { tableCta } from '@/lib/table-cta';
+import { upcomingDiscoverTables } from '@/lib/table-time';
 
 /* ─── types ──────────────────────────────────────────────────────── */
 
@@ -79,6 +80,8 @@ function matchesPrice(t: TableDto, tier: PriceTier): boolean {
 
 function matchesWhen(t: TableDto, when: WhenFilter, customDate: string): boolean {
   const start = new Date(t.startAt).getTime();
+  // Public explore is upcoming-only — past tables belong on Meetups / profile.
+  if (start <= NOW) return false;
   if (when === 'anytime') return true;
   if (when === 'today') {
     const todayStart = new Date(NOW).setHours(0, 0, 0, 0);
@@ -446,7 +449,8 @@ export default function DiscoverPage() {
   // Re-seed on render when auth resolves / cache fills (no effect setState).
   const seedBrowse = peekCache<TableDto[]>(tablesCacheKeys(user?.id).browse);
   const seedJoined = peekCache<TableDto[]>(tablesCacheKeys(user?.id).joined);
-  const tablesView = tables ?? seedBrowse ?? null;
+  const rawBrowse = tables ?? seedBrowse ?? null;
+  const tablesView = rawBrowse == null ? null : upcomingDiscoverTables(rawBrowse);
   const myJoinedView = myJoined.length > 0 ? myJoined : (seedJoined ?? []);
 
   // filters

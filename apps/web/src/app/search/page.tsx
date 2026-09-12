@@ -12,6 +12,7 @@ import { formatDateTime, formatPKR } from '@/lib/format';
 import { categoryIcon, splitCategories } from '@/lib/category-icon';
 import { haversineKm, formatDistance, googleMapsUrl } from '@/lib/geo';
 import { tableCta } from '@/lib/table-cta';
+import { upcomingDiscoverTables } from '@/lib/table-time';
 import { Cover } from '@/components/cover-image';
 import { Avatar } from '@/components/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -683,7 +684,8 @@ function SearchInner() {
   const seedBrowse = peekCache<TableDto[]>(tablesCacheKeys(user?.id).browse);
   const [tables, setTables] = useState<TableDto[] | null>(null);
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
-  const tablesView = tables ?? seedBrowse ?? null;
+  const rawBrowse = tables ?? seedBrowse ?? null;
+  const tablesView = rawBrowse == null ? null : upcomingDiscoverTables(rawBrowse);
 
   // filter state
   const [location, setLocation] = useState('Islamabad, Pakistan');
