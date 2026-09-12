@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
-import { NewsletterController } from './newsletter.controller';
+import {
+  NewsletterAdminController,
+  NewsletterController,
+} from './newsletter.controller';
 import { NewsletterService } from './newsletter.service';
 
 @Module({
-  controllers: [NewsletterController],
+  controllers: [NewsletterController, NewsletterAdminController],
   providers: [NewsletterService],
 })
 export class NewsletterModule {}

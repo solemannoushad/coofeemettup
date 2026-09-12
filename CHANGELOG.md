@@ -4,6 +4,10 @@ All notable UI/product changes are logged here.
 
 ## [Unreleased]
 
+### 2026-09-12 — Live newsletter subscribe route
+
+- Public subscribe is explicitly mounted at `POST /api/newsletter/subscribe` (`@Controller('newsletter')`) so the footer form hits a registered Nest route after API redeploy. Admin list stays at `GET /api/admin/newsletter/subscribers`.
+
 ### 2026-09-12 — Messages inbox cached across visits
 
 - `/messages` seeds the conversation list (and last-opened thread) from the existing SWR cache, so client navigations skip the skeleton and refresh in the background. Cache is written on poll, send, and read; logout still clears it.
